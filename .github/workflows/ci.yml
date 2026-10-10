@@ -94,10 +94,47 @@ jobs:
           verbose: true
 
   # ========================================
-  # JOB 3: Build (Expo Application Services)
+  # JOB 3: SAST — Static Application Security Testing
+  # ========================================
+  sast:
+    needs: quality-and-security
+    runs-on: ubuntu-latest
+    concurrency: { group: ci-sast-${{ github.ref }}, cancel-in-progress: true }
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for accurate CodeQL analysis
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          # Security-focused CodeQL queries:
+          # - js/xss (Reflected XSS in web layer)
+          # - js/injection (SQL/command/LDAP injection)
+          # - js/hardcoded-credentials (CWE-798)
+          # - js/path-injection (CWE-22 — path traversal)
+          # - js/prototype-pollution (CWE-1321)
+          # - js/unsafe-deserialization (CWE-502)
+          queries: security-and-quality
+          # Upload results as SARIF for GitHub Code Scanning
+          output: codeql-output
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          # Fail the job if CodeQL finds any error or higher severity
+          # This enforces SAST in CI (OWASP ASVS V18.2.1)
+          category: "codeql-security"
+
+  # ========================================
+  # JOB 4: Build (Expo Application Services)
   # ========================================
   build-android:
-    needs: test
+    needs: [test, sast]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -119,7 +156,7 @@ jobs:
         run: eas build --platform android --profile preview --non-interactive
 
   build-ios:
-    needs: test
+    needs: [test, sast]
     runs-on: macos-latest
     if: github.ref == 'refs/heads/main'
 
