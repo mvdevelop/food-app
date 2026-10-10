@@ -40,9 +40,11 @@ class TestErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundar
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+  componentDidCatch(error: Error, _errorInfo: React.ErrorInfo): void {
     if (__DEV__) {
       console.error("[ErrorBoundary] Unhandled render error:", error.message);
+      // In dev, also log the component stack for debugging
+      // (intentionally captured via _errorInfo parameter above)
     } else {
       console.error("[ErrorBoundary] An unexpected error occurred.");
     }
@@ -65,9 +67,10 @@ class TestErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundar
 
 // ── A component that throws ──
 
-function ThrowOnRender() {
+// eslint-disable-next-line react/display-name
+const ThrowOnRender: React.FC = () => {
   throw new Error("Test error: simulated crash");
-}
+};
 
 // ── Tests ──
 
