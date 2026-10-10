@@ -1,103 +1,208 @@
-
 # 🍱 Food App
 
-A modern **React Native** application built with **TailwindCSS**, designed to deliver a smooth and visually appealing food ordering experience.  
-This project focuses on elegant UI, responsive layouts, and fast performance — ideal for learning and production use.
+<img src="./assets/images/logo.png" width="80" align="right"/>
+
+A modern **React Native** food-ordering application built with **Expo**, **TailwindCSS**, and **React Navigation** — demonstrating **enterprise-grade security**, **test-driven development**, and **professional CI/CD practices**.
+
+> **Portfolio Project** | Computer Science graduate | Showcasing full-stack mobile engineering with AppSec focus
+
+<!-- ────────────────────────────────────────────────────────────── -->
+
+## 🛡️ Security Posture
+
+| Metric                  | Status                                                   |
+| ----------------------- | -------------------------------------------------------- |
+| Hardcoded secrets       | ✅ **None** (secret scanning in CI)                      |
+| npm audit (critical+)   | ✅ **0 critical, 0 high** (from 3 critical)              |
+| OWASP Top 10 coverage   | ✅ Secret scanning · Input validation · Dependency audit |
+| Supply chain protection | ✅ `.npmrc` · `ignore-scripts` · `npm audit` on install  |
+
+<details>
+<summary>🔐 Security features in detail</summary>
+
+| Practice               | Implementation                                                          |
+| ---------------------- | ----------------------------------------------------------------------- |
+| **Secrets management** | `.env.example` template, `.gitignore` blocks `.env*`, no hardcoded keys |
+| **Secret scanning**    | Jest test scans entire codebase on every CI run                         |
+| **Dependency audit**   | `--audit-level=high` enforced in CI                                     |
+| **Input validation**   | Jest security tests guard against XSS & command injection in data       |
+| **Type safety**        | TypeScript strict mode with `noUncheckedIndexedAccess`                  |
+| **Pre-commit hooks**   | Husky + lint-staged: lint, format, audit before every commit            |
+| **Security policy**    | `SECURITY.md` with vulnerability disclosure process                     |
+
+</details>
+
+<!-- ────────────────────────────────────────────────────────────── -->
+
+## ✨ Features
+
+| Feature                               | Stack                                             |
+| ------------------------------------- | ------------------------------------------------- |
+| 📱 Cross-platform (iOS, Android, Web) | React Native 0.81 + Expo 54                       |
+| 🎨 Utility-first styling              | TailwindCSS 3.4 via NativeWind 4.2                |
+| ⚡ Fast refresh & hot reload          | Metro Bundler + Expo Dev Client                   |
+| 🍔 Food browsing UI                   | Static data with dynamic rendering                |
+| 🔍 Search & filter UI                 | NativeWind component classes                      |
+| 🛒 Cart management                    | (UI skeleton + CSS components ready)              |
+| 🧪 Test suite                         | Jest + React Testing Library                      |
+| 🔒 Security-first                     | ESLint security rules, secret scanning, npm audit |
+| 🔄 CI/CD pipeline                     | GitHub Actions: lint → test → audit → build       |
+| 📦 EAS builds                         | Android APK/AAB + iOS IPA via Expo                |
 
 ---
 
-## 🚀 Features
+## 🏗️ Tech Stack
 
-- 📱 **Cross-platform:** Works on both Android and iOS  
-- 🎨 **Styled with TailwindCSS:** Clean, utility-first design system  
-- ⚡ **Fast Refresh:** Instant code updates during development  
-- 🍔 **Food browsing UI:** Explore meals with images, prices, and details  
-- 🔍 **Search and filtering:** Quickly find your favorite dishes  
-- 🛒 **Cart management:** Add, remove, and review orders in real time  
+```mermaid
+graph TD
+    A[React Native 0.81] --> B[Expo 54 SDK]
+    B --> C[expo-router - File-based routing]
+    B --> D[expo-font - Custom Quicksand fonts]
+    A --> E[NativeWind 4.2]
+    E --> F[TailwindCSS 3.4]
+    A --> G[React Navigation 7.x]
+    G --> H[Bottom Tabs + Stack]
+    I[Jest 29] --> J[Unit + Integration + Security tests]
+    K[GitHub Actions] --> L[CI/CD Pipeline]
+    L --> M[EAS Build - Android + iOS]
+```
 
----
-
-## 🛠️ Tech Stack
-
-- [React Native](https://reactnative.dev/) – Core framework  
-- [Expo](https://expo.dev/) – Development environment and build tools  
-- [TailwindCSS](https://tailwindcss.com/) – Utility-first CSS framework via [NativeWind](https://www.nativewind.dev/)  
-- [React Navigation](https://reactnavigation.org/) – App routing and navigation  
-- [Expo Icons](https://icons.expo.fyi/) – Icon library for UI design  
+| Layer            | Technology                                             |
+| ---------------- | ------------------------------------------------------ |
+| **Framework**    | React Native 0.81 (React 19)                           |
+| **Toolchain**    | Expo SDK 54 + EAS Build                                |
+| **Navigation**   | Expo Router (File-based) + React Navigation 7          |
+| **Styling**      | TailwindCSS 3.4 ↔ NativeWind 4.2                      |
+| **Fonts**        | Quicksand (Bold / Medium / Regular / SemiBold / Light) |
+| **Testing**      | Jest 29 · React Testing Library · jest-expo            |
+| **CI/CD**        | GitHub Actions + EAS                                   |
+| **Code Quality** | ESLint 9 · Prettier 3 · TypeScript strict              |
 
 ---
 
 ## 📦 Installation
 
-Clone the repository and install dependencies:
-
-bash
+```bash
 git clone https://github.com/mvdevelop/food-app.git
 cd food-app
-npm install
-Or with Yarn:
-bash
-yarn install
+npm ci
+cp .env.example .env.local
+npm start
+```
 
-## ▶️ Running the App
+---
 
-Start the Expo development server:
+## 🚀 Running
 
-bash
-npx expo start
-Then:
+```bash
+npm start          # Expo dev server (scan QR with Expo Go)
+npm run android    # Run on Android device/emulator
+npm run ios        # Run on iOS simulator
+npm run web        # Run in browser (experimental)
+```
 
-Open the Expo Go app on your Android or iOS device.
+---
 
-Scan the QR code shown in your terminal or browser.
+## 🧪 Testing
 
-The Food App will launch instantly.
+```bash
+npm test                   # All tests
+npm run test:unit          # Unit tests only
+npm run test:integration   # Integration tests
+npm run test:security      # Security tests (secret scan, input validation)
+npm run test:coverage      # With coverage report
+npm run test:watch         # Watch mode
+```
 
-## 💅 TailwindCSS Setup (via NativeWind)
-This project uses NativeWind for TailwindCSS styling in React Native.
+### Test Coverage
 
-You can customize styles in your tailwind.config.js file:
+| Test Type       | Purpose                                                             |
+| --------------- | ------------------------------------------------------------------- |
+| **Unit**        | Validate static data integrity (constants, categories, offers)      |
+| **Integration** | Render components, verify navigation, no console errors             |
+| **Security**    | Scan for hardcoded secrets, API keys, XSS/command injection vectors |
 
-js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./App.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
+---
 
-## 📁 Project Structure
-bash
+## 🔧 Project Structure
+
+```
 food-app/
-├── assets/             # Images, fonts, and icons
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── screens/        # App screens (Home, Details, Cart, etc.)
-│   ├── navigation/     # Navigation configuration
-│   └── utils/          # Helper functions
-├── App.js              # Main app entry
-├── tailwind.config.js  # TailwindCSS configuration
+├── .github/workflows/        # CI/CD pipeline (GitHub Actions)
+├── .vscode/                  # VS Code config (extensions, MCP, settings)
+├── app/                      # Expo Router app directory
+│   ├── _layout.tsx           # Root layout (Stack navigator, font loading)
+│   ├── globals.css           # Tailwind directives + custom CSS classes
+│   └── index.tsx             # Home screen (Food offers list)
+├── __tests__/                # Test suite
+│   ├── unit/                 # Unit tests
+│   ├── integration/          # Integration tests
+│   └── security/             # Security tests
+├── assets/                   # Fonts (5), Icons (20), Images (29)
+├── constants/                # Static data (categories, offers, sides, toppings)
+├── .env.example              # Environment variable template
+├── .eslintrc.js              # ESLint config (flat config)
+├── .husky/                   # Git hooks
+├── .npmrc                    # npm security config
+├── .prettierrc               # Prettier config
+├── SECURITY.md               # Security policy & vulnerability disclosure
+├── CONTRIBUTING.md           # Developer onboarding guide
+├── eas.json                  # EAS Build & Submit config
+├── jest.config.js            # Jest test config
+├── tsconfig.json             # TypeScript config (strict)
 └── package.json
+```
 
-## 🧩 Scripts
-Command	Description
-npm start	Start the Expo development server
-npm run android	Run on Android device or emulator
-npm run ios	Run on iOS simulator
-npm run web	Run on web (experimental)
+---
 
-## 📸 Screenshots
-Add screenshots or GIFs of your app here.
+## 🛠️ Scripts
 
-## 🤝 Contributing
-Contributions are welcome!
-Feel free to open issues or submit pull requests to help improve the project.
+| Command              | Description                     |
+| -------------------- | ------------------------------- |
+| `npm start`          | Start Expo dev server           |
+| `npm run android`    | Run on Android device/emulator  |
+| `npm run ios`        | Run on iOS simulator            |
+| `npm run web`        | Run in web browser              |
+| `npm run lint`       | Run ESLint                      |
+| `npm run lint:fix`   | Auto-fix ESLint issues          |
+| `npm run type-check` | TypeScript type checking        |
+| `npm run format`     | Format code with Prettier       |
+| `npm run test`       | Run all tests                   |
+| `npm run audit:ci`   | Security audit (fails on high+) |
 
-## 🧑‍💻 Author
-mvdevelop
+---
 
 ## 📜 License
-This project is licensed under the MIT License.
-See the LICENSE file for more details.
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Marco Vinicius Dilly** — Computer Science student & passionate developer.
+
+- GitHub: [@mvdevelop](https://github.com/mvdevelop)
+- Security-first approach • Test-driven development • Clean architecture
+
+<br>
+
+---
+
+## 📸 Screenshots
+
+_(Screenshots will be added here)_
+
+---
+
+## 📚 Architecture Decisions
+
+See [docs/adr/](./docs/adr/) for Architecture Decision Records documenting key technical choices.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for the development workflow and code standards.
+
+For security vulnerabilities, please read [SECURITY.md](./SECURITY.md) and report responsibly.

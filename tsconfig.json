@@ -10,7 +10,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "dist", "web-build", "expo-env.d.ts"]
 }

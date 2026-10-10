@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Security & Quality Gates — pre-commit hook
+# Runs lint, type-check, and security audit before every commit.
+# If any check fails, the commit is blocked.
+
+echo "🔍 Running lint-staged (format + lint)..."
+npx lint-staged
+
+echo "🧪 Running type-check..."
+npm run type-check
+
+echo "🔐 Running security audit (audit-ci, high+)..."
+# audit-ci uses .audit-ci.json allowlist for known transitive vulnerabilities
+# This prevents dev-tooling vulns from blocking commits while catching new issues
+npx audit-ci --high --config .audit-ci.json
+
+echo "✅ All pre-commit checks passed."

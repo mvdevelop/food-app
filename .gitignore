@@ -46,3 +46,17 @@ app-example
 .vercel
 
 .env.local
+
+# Test coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# IDE and editor files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/mcp.json
+!.vscode/settings.json

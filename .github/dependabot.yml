@@ -1,0 +1,47 @@
+# Dependabot — Automated dependency updates
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates-configuration-options-for-the-property-key
+
+version: 2
+
+updates:
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "mvdevelop"
+    labels:
+      - "dependencies"
+      - "automated-pr"
+    # Only notify on security updates for major version bumps
+    # (prevents breaking changes from sneaking into PRs)
+    groups:
+      # Group minor/patch updates into a single PR to reduce noise
+      minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Ignore major version bumps — must be reviewed manually by tech lead
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    reviewers:
+      - "mvdevelop"
+    labels:
+      - "actions"
+      - "automated-pr"
+    open-pull-requests-limit: 5
