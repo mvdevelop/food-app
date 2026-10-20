@@ -55,5 +55,15 @@ export const CategoryArraySchema = z.array(CategorySchema);
 export const OfferArraySchema = z.array(OfferSchema);
 export const RestaurantArraySchema = z.array(RestaurantSchema);
 export const MenuItemArraySchema = z.array(MenuItemSchema);
+export const ComboSchema = z.object({
+  id: z.string().min(1),
+  restaurantId: z.string().min(1),
+  name: SafeText(80),
+  description: SafeText(180),
+  price: z.number().positive(),
+  discount: z.number().min(0).max(100),
+  items: z.array(z.string().min(1)),
+});
+export const ComboArraySchema = z.array(ComboSchema);
 export const SideArraySchema = z.array(SideSchema);
 export const ToppingArraySchema = z.array(ToppingSchema);

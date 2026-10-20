@@ -1,9 +1,11 @@
-import React, { useMemo } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { Image, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
-import { currency, menuItems, restaurants } from "@/src/data/marketplace";
+import { combos, currency, menuItems, restaurants } from "@/src/data/marketplace";
 import { useCart } from "@/src/state/cart";
+import { useFavorites } from "@/src/state/favorites";
+import { api } from "@/src/services/api";
 
 export default function RestaurantScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -14,6 +16,26 @@ export default function RestaurantScreen() {
     [restaurantId],
   );
   const { add, state } = useCart();
+  const { toggle, isFavorite } = useFavorites();
+  const [reviews, setReviews] = useState<
+    { id: string; userName: string; rating: number; comment: string }[]
+  >([]);
+  const [customizing, setCustomizing] = useState<(typeof menuItems)[number] | null>(null);
+  const [selectedExtras, setSelectedExtras] = useState<{ name: string; price: number }[]>([]);
+  const extras = [
+    { name: "Queijo extra", price: 3.5 },
+    { name: "Bacon crocante", price: 4.9 },
+    { name: "Fritas", price: 9.9 },
+  ];
+  const restaurantCombos = combos.filter((combo) => combo.restaurantId === restaurantId);
+  useEffect(() => {
+    api
+      .reviews(restaurantId)
+      .then((data) =>
+        setReviews(data as { id: string; userName: string; rating: number; comment: string }[]),
+      )
+      .catch(() => setReviews([]));
+  }, [restaurantId]);
   if (!restaurant) {
     return null;
   }
@@ -39,7 +61,16 @@ export default function RestaurantScreen() {
         <View className="-mt-5 rounded-t-3xl bg-stone-50 px-5 pt-6">
           <View className="flex-row items-start justify-between">
             <View className="flex-1">
-              <Text className="h1-bold text-slate-900">{restaurant.name}</Text>
+              <View className="flex-row items-center">
+                <Text className="h1-bold flex-1 text-slate-900">{restaurant.name}</Text>
+                <Pressable
+                  accessibilityLabel="Favoritar restaurante"
+                  accessibilityRole="button"
+                  onPress={() => toggle(restaurant.id)}
+                >
+                  <Text className="text-2xl">{isFavorite(restaurant.id) ? "♥" : "♡"}</Text>
+                </Pressable>
+              </View>
               <Text className="body-regular mt-1 text-slate-500">{restaurant.cuisine}</Text>
             </View>
             <View className="items-center rounded-xl bg-emerald-50 px-3 py-2">
@@ -53,6 +84,49 @@ export default function RestaurantScreen() {
               {restaurant.deliveryFee === 0 ? "Entrega grátis" : currency(restaurant.deliveryFee)}
             </Text>
           </View>
+          <Text className="mt-8 h3-bold text-slate-900">Mais pedidos</Text>
+          {reviews.length > 0 && (
+            <>
+              <Text className="mt-8 h3-bold text-slate-900">O que nossos clientes dizem</Text>
+              {reviews.map((review) => (
+                <View key={review.id} className="mt-3 rounded-2xl bg-white p-4">
+                  <View className="flex-row justify-between">
+                    <Text className="paragraph-bold text-slate-900">{review.userName}</Text>
+                    <Text className="small-bold text-amber-600">★ {review.rating}</Text>
+                  </View>
+                  <Text className="body-regular mt-2 text-slate-600">{review.comment}</Text>
+                </View>
+              ))}
+            </>
+          )}
+          {restaurantCombos.length > 0 && (
+            <>
+              <Text className="mt-8 h3-bold text-slate-900">Combos e ofertas</Text>
+              {restaurantCombos.map((combo) => (
+                <View key={combo.id} className="mt-3 rounded-2xl bg-orange-50 p-4">
+                  <View className="flex-row justify-between">
+                    <View className="flex-1">
+                      <Text className="base-bold text-slate-900">{combo.name}</Text>
+                      <Text className="body-regular mt-1 text-slate-600">{combo.description}</Text>
+                    </View>
+                    <Text className="paragraph-bold text-orange-600">{currency(combo.price)}</Text>
+                  </View>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => {
+                      const item = menuItems.find((entry) => entry.id === combo.items[0]);
+                      if (item) {
+                        add(item);
+                      }
+                    }}
+                    className="mt-3 items-center rounded-xl bg-orange-500 py-2"
+                  >
+                    <Text className="paragraph-bold text-white">Adicionar combo</Text>
+                  </Pressable>
+                </View>
+              ))}
+            </>
+          )}
           <Text className="mt-8 h3-bold text-slate-900">Mais pedidos</Text>
           {items.map((item) => (
             <View
@@ -70,7 +144,10 @@ export default function RestaurantScreen() {
               <Pressable
                 accessibilityLabel={`Adicionar ${item.name}`}
                 accessibilityRole="button"
-                onPress={() => add(item)}
+                onPress={() => {
+                  setCustomizing(item);
+                  setSelectedExtras([]);
+                }}
                 className="h-11 w-11 items-center justify-center rounded-full bg-orange-500"
               >
                 <Text className="text-2xl text-white">+</Text>
@@ -79,6 +156,59 @@ export default function RestaurantScreen() {
           ))}
         </View>
       </ScrollView>
+      <Modal
+        visible={customizing !== null}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setCustomizing(null)}
+      >
+        <View className="flex-1 justify-end bg-black/40">
+          <View className="rounded-t-3xl bg-white p-5">
+            <View className="flex-row items-center justify-between">
+              <Text className="h3-bold text-slate-900">Personalize seu pedido</Text>
+              <Pressable accessibilityLabel="Fechar" onPress={() => setCustomizing(null)}>
+                <Text className="text-2xl text-slate-500">×</Text>
+              </Pressable>
+            </View>
+            <Text className="base-bold mt-5 text-slate-900">{customizing?.name}</Text>
+            <Text className="body-medium mt-1 text-slate-500">Escolha seus adicionais</Text>
+            {extras.map((extra) => {
+              const selected = selectedExtras.some((item) => item.name === extra.name);
+              return (
+                <Pressable
+                  key={extra.name}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: selected }}
+                  onPress={() =>
+                    setSelectedExtras((current) =>
+                      selected
+                        ? current.filter((item) => item.name !== extra.name)
+                        : [...current, extra],
+                    )
+                  }
+                  className="mt-3 flex-row items-center justify-between rounded-xl bg-stone-50 p-4"
+                >
+                  <Text className="paragraph-bold text-slate-900">
+                    {selected ? "✓" : "○"} {extra.name}
+                  </Text>
+                  <Text className="body-medium text-slate-600">+ {currency(extra.price)}</Text>
+                </Pressable>
+              );
+            })}
+            <Pressable
+              onPress={() => {
+                if (customizing) {
+                  add(customizing, selectedExtras);
+                }
+                setCustomizing(null);
+              }}
+              className="mt-5 items-center rounded-2xl bg-orange-500 py-4"
+            >
+              <Text className="base-bold text-white">Adicionar ao carrinho</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       {count > 0 && (
         <Pressable
           accessibilityRole="button"

@@ -4,21 +4,45 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { currency } from "@/src/data/marketplace";
 import { useCart } from "@/src/state/cart";
+import { useAuth } from "@/src/state/auth";
+import { api } from "@/src/services/api";
 
 export default function CheckoutScreen() {
   const { state, clear } = useCart();
+  const { user } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
   const [note, setNote] = useState("");
   const subtotal = state.lines.reduce((sum, line) => sum + line.item.price * line.quantity, 0);
   const total = subtotal + 4.99;
-  const placeOrder = () => {
+  const placeOrder = async () => {
     if (!state.lines.length) {
       Alert.alert("Carrinho vazio", "Adicione um item antes de continuar.");
       return;
     }
-    clear();
-    Alert.alert("Pedido confirmado!", "Seu pedido está sendo preparado.", [
-      { text: "Acompanhar pedido", onPress: () => router.replace("/orders") },
-    ]);
+    setSubmitting(true);
+    const order = {
+      id: `order-${Date.now()}`,
+      userId: user?.id ?? "user-001",
+      restaurantId: state.lines[0]?.item.restaurantId ?? "burger-house",
+      status: "received",
+      subtotal,
+      deliveryFee: 4.99,
+      total,
+      note,
+      createdAt: new Date().toISOString(),
+      items: state.lines.map((line) => ({ dishId: line.item.id, quantity: line.quantity })),
+    };
+    try {
+      await api.createOrder(order);
+    } catch {
+      // The local demo remains usable when json-server is offline.
+    } finally {
+      setSubmitting(false);
+      clear();
+      Alert.alert("Pedido confirmado!", "Seu pedido está sendo preparado.", [
+        { text: "Acompanhar pedido", onPress: () => router.replace("/orders") },
+      ]);
+    }
   };
   return (
     <SafeAreaView className="flex-1 bg-stone-50">
@@ -69,7 +93,9 @@ export default function CheckoutScreen() {
           onPress={placeOrder}
           className="mt-5 items-center rounded-2xl bg-orange-500 py-4"
         >
-          <Text className="base-bold text-white">Confirmar pedido</Text>
+          <Text className="base-bold text-white">
+            {submitting ? "Enviando pedido..." : "Confirmar pedido"}
+          </Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

@@ -26,7 +26,7 @@ module.exports = {
 
   // Transform patterns for node_modules that ship untranspiled code
   transformIgnorePatterns: [
-    "node_modules/(?!((jest-)?react-native|@react-native|@react-navigation|expo|@expo|expo-router|expo-font|expo-splash-screen|react-native-safe-area-context|react-native-screens|react-native-worklets|react-native-gesture-handler|react-native-reanimated|react-native-css-interop|react-native-css-interop|native-svg|clsx)/)",
+    "node_modules/(?!((jest-)?react-native|@react-native|@react-navigation|expo|@expo|expo-router|expo-font|expo-asset|expo-modules-core|expo-splash-screen|react-native-safe-area-context|react-native-screens|react-native-worklets|react-native-gesture-handler|react-native-reanimated|react-native-css-interop|react-native-css-interop|native-svg|clsx)/)",
   ],
 
   // Coverage configuration — enforce minimum coverage thresholds

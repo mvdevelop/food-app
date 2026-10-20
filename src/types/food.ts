@@ -35,6 +35,16 @@ export interface MenuItem {
   readonly popular?: boolean;
 }
 
+export interface Combo {
+  readonly id: string;
+  readonly restaurantId: string;
+  readonly name: string;
+  readonly description: string;
+  readonly price: number;
+  readonly discount: number;
+  readonly items: string[];
+}
+
 export interface Side {
   readonly name: string;
   readonly image: any;

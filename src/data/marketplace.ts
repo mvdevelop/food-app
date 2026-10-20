@@ -1,6 +1,7 @@
 import { images } from "@/constants";
 import {
   CategoryArraySchema,
+  ComboArraySchema,
   MenuItemArraySchema,
   RestaurantArraySchema,
 } from "@/src/schemas/food";
@@ -91,4 +92,29 @@ export const menuItems = MenuItemArraySchema.parse([
   },
 ]);
 
+export const combos = ComboArraySchema.parse([
+  {
+    id: "combo-house",
+    restaurantId: "burger-house",
+    name: "Combo House",
+    description: "Classic House + fritas + bebida",
+    price: 39.9,
+    discount: 15,
+    items: ["classic-burger", "fries", "soda"],
+  },
+  {
+    id: "combo-pizza",
+    restaurantId: "pizza-verde",
+    name: "Pizza em dobro",
+    description: "Duas pizzas grandes selecionadas",
+    price: 69.9,
+    discount: 20,
+    items: ["margherita", "pizza-special"],
+  },
+]);
+export const toppings = [
+  { id: "extra-cheese", name: "Queijo extra", price: 3.5 },
+  { id: "bacon", name: "Bacon crocante", price: 4.9 },
+  { id: "fries", name: "Fritas", price: 9.9 },
+];
 export const currency = (value: number) => `R$ ${value.toFixed(2).replace(".", ",")}`;

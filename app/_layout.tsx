@@ -4,6 +4,8 @@ import React from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 import { CartProvider } from "@/src/state/cart";
+import { AuthProvider } from "@/src/state/auth";
+import { FavoritesProvider } from "@/src/state/favorites";
 import { useFonts } from "expo-font";
 
 // ──────────────────────────────────────────────────────────────
@@ -115,9 +117,13 @@ export default function RootLayout() {
   // exceptions from exposing stack traces (CWE-209: Information Exposure).
   return (
     <SafeErrorBoundary>
-      <CartProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </CartProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+          </CartProvider>
+        </FavoritesProvider>
+      </AuthProvider>
     </SafeErrorBoundary>
   );
 }

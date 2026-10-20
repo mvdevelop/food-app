@@ -3,12 +3,12 @@ import { FlatList, Image, Pressable, ScrollView, Text, TextInput, View } from "r
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { categories, currency, restaurants } from "@/src/data/marketplace";
-import { useCart } from "@/src/state/cart";
+import { offers } from "@/constants";
 
 export default function Index() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
-  const { state } = useCart();
+  const state = { lines: [] as { quantity: number; item: { price: number } }[] };
   const filtered = useMemo(
     () =>
       restaurants.filter((restaurant) => {
@@ -56,6 +56,25 @@ export default function Index() {
             />
           </View>
         </View>
+        <Text className="mt-7 px-5 h3-bold text-slate-900">Ofertas para você</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mt-3 pl-5"
+          contentContainerStyle={{ gap: 12 }}
+        >
+          {offers.map((offer) => (
+            <Pressable
+              key={offer.id}
+              accessibilityRole="button"
+              className="h-28 w-64 overflow-hidden rounded-2xl px-4 py-3"
+              style={{ backgroundColor: offer.color }}
+            >
+              <Text className="small-bold text-white">OFERTA ESPECIAL</Text>
+              <Text className="base-bold mt-2 text-white">{offer.title}</Text>
+            </Pressable>
+          ))}
+        </ScrollView>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -82,7 +101,9 @@ export default function Index() {
         <View className="mt-7 px-5">
           <View className="flex-row items-center justify-between">
             <Text className="h3-bold text-slate-900">Perto de você</Text>
-            <Text className="body-medium text-orange-600">Ver todos</Text>
+            <Pressable accessibilityRole="button" onPress={() => router.push("/map")}>
+              <Text className="body-medium text-orange-600">Ver no mapa</Text>
+            </Pressable>
           </View>
         </View>
         <FlatList

@@ -1,0 +1,209 @@
+{
+  "users": [
+    {
+      "id": "user-001",
+      "name": "Marina Costa",
+      "email": "marina@example.com",
+      "password": "demo-password",
+      "phone": "+55 11 99999-0000",
+      "avatar": "avatar",
+      "role": "customer"
+    },
+    {
+      "id": "user-002",
+      "name": "João Ribeiro",
+      "email": "joao@example.com",
+      "password": "demo-password",
+      "phone": "+55 11 98888-0000",
+      "avatar": "avatar",
+      "role": "customer"
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "burger-house",
+      "name": "Burger House",
+      "description": "Hambúrguer artesanal feito na hora",
+      "cuisine": "Hambúrguer • Americana",
+      "rating": 4.8,
+      "reviews": 1240,
+      "deliveryTime": "25–35 min",
+      "deliveryFee": 0,
+      "category": "burger",
+      "latitude": -23.5614,
+      "longitude": -46.656,
+      "isOpen": true
+    },
+    {
+      "id": "pizza-verde",
+      "name": "Pizza Verde",
+      "description": "Receitas italianas com ingredientes frescos",
+      "cuisine": "Pizza • Italiana",
+      "rating": 4.7,
+      "reviews": 892,
+      "deliveryTime": "30–40 min",
+      "deliveryFee": 4.99,
+      "category": "pizza",
+      "latitude": -23.5641,
+      "longitude": -46.6522,
+      "isOpen": true
+    },
+    {
+      "id": "bowl-fresh",
+      "name": "Bowl Fresh",
+      "description": "Comida leve para todos os dias",
+      "cuisine": "Saudável • Bowls",
+      "rating": 4.9,
+      "reviews": 563,
+      "deliveryTime": "20–30 min",
+      "deliveryFee": 2.99,
+      "category": "healthy",
+      "latitude": -23.558,
+      "longitude": -46.659,
+      "isOpen": true
+    }
+  ],
+  "categories": [
+    { "id": "burger", "name": "Hambúrguer", "emoji": "🍔" },
+    { "id": "pizza", "name": "Pizza", "emoji": "🍕" },
+    { "id": "japanese", "name": "Japonesa", "emoji": "🍣" },
+    { "id": "healthy", "name": "Saudável", "emoji": "🥗" },
+    { "id": "dessert", "name": "Doces", "emoji": "🍰" }
+  ],
+  "dishes": [
+    {
+      "id": "classic-burger",
+      "restaurantId": "burger-house",
+      "name": "Classic House",
+      "description": "Blend artesanal, cheddar, alface e molho da casa",
+      "price": 29.9,
+      "image": "burgerOne",
+      "popular": true
+    },
+    {
+      "id": "double-burger",
+      "restaurantId": "burger-house",
+      "name": "Double Bacon",
+      "description": "Dois blends, bacon crocante e cheddar",
+      "price": 36.9,
+      "image": "burgerTwo",
+      "popular": true
+    },
+    {
+      "id": "margherita",
+      "restaurantId": "pizza-verde",
+      "name": "Margherita",
+      "description": "Tomate, mozzarella fresca e manjericão",
+      "price": 42.9,
+      "image": "pizzaOne",
+      "popular": true
+    },
+    {
+      "id": "green-bowl",
+      "restaurantId": "bowl-fresh",
+      "name": "Green Power",
+      "description": "Folhas, avocado, tomate e molho cítrico",
+      "price": 31.9,
+      "image": "salad",
+      "popular": true
+    }
+  ],
+  "combos": [
+    {
+      "id": "combo-house",
+      "restaurantId": "burger-house",
+      "name": "Combo House",
+      "description": "Classic House + fritas + bebida",
+      "price": 39.9,
+      "discount": 15,
+      "items": ["classic-burger", "fries", "soda"]
+    },
+    {
+      "id": "combo-pizza",
+      "restaurantId": "pizza-verde",
+      "name": "Pizza em dobro",
+      "description": "Duas pizzas grandes selecionadas",
+      "price": 69.9,
+      "discount": 20,
+      "items": ["margherita", "pizza-special"]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-001",
+      "restaurantId": "burger-house",
+      "userId": "user-001",
+      "userName": "Marina Costa",
+      "rating": 5,
+      "comment": "O hambúrguer chegou quentinho e muito saboroso!",
+      "createdAt": "2026-10-18"
+    },
+    {
+      "id": "review-002",
+      "restaurantId": "pizza-verde",
+      "userId": "user-002",
+      "userName": "João Ribeiro",
+      "rating": 4,
+      "comment": "Massa leve e entrega dentro do prazo.",
+      "createdAt": "2026-10-17"
+    }
+  ],
+  "orders": [
+    {
+      "id": "order-10482",
+      "userId": "user-001",
+      "restaurantId": "burger-house",
+      "status": "on_the_way",
+      "subtotal": 66.8,
+      "deliveryFee": 0,
+      "total": 66.8,
+      "estimatedDelivery": "12:55–13:05",
+      "createdAt": "2026-10-20T12:32:00Z",
+      "items": [
+        { "dishId": "classic-burger", "quantity": 1 },
+        { "dishId": "double-burger", "quantity": 1 }
+      ]
+    }
+  ],
+  "addresses": [
+    {
+      "id": "address-001",
+      "userId": "user-001",
+      "label": "Casa",
+      "street": "Rua Augusta, 120",
+      "district": "Consolação",
+      "city": "São Paulo",
+      "zipCode": "01305-000",
+      "latitude": -23.5614,
+      "longitude": -46.656,
+      "isDefault": true
+    }
+  ],
+  "coupons": [
+    {
+      "id": "coupon-001",
+      "code": "BEMVINDO10",
+      "type": "percentage",
+      "value": 10,
+      "minimumOrder": 30,
+      "active": true
+    },
+    {
+      "id": "coupon-002",
+      "code": "FRETEGRATIS",
+      "type": "delivery",
+      "value": 0,
+      "minimumOrder": 20,
+      "active": true
+    }
+  ],
+  "payments": [
+    {
+      "id": "payment-001",
+      "userId": "user-001",
+      "brand": "Visa",
+      "lastFour": "4242",
+      "isDefault": true
+    }
+  ]
+}

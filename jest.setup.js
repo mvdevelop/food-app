@@ -7,6 +7,20 @@
 // React Native requires __DEV__ global — set it for test environment
 global.__DEV__ = true;
 
+// Mock expo-router in Jest's Node environment; navigation is covered by Expo runtime.
+jest.mock("expo-router", () => {
+  const mockReact = require("react");
+  const mockStack = ({ children }) => mockReact.createElement(mockReact.Fragment, null, children);
+  mockStack.Screen = () => null;
+  return {
+    Stack: mockStack,
+    Tabs: mockStack,
+    router: { push: jest.fn(), replace: jest.fn(), back: jest.fn() },
+    useLocalSearchParams: () => ({}),
+    SplashScreen: { hideAsync: jest.fn().mockResolvedValue(true), preventAutoHideAsync: jest.fn() },
+  };
+});
+
 // Mock expo modules that require native linking
 jest.mock("expo-font", () => ({
   useFonts: jest.fn(() => [true, null]),

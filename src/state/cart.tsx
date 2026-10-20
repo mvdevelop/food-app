@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useMemo, useReducer } from "react";
 import type { MenuItem } from "@/src/types/food";
 
-type Line = { item: MenuItem; quantity: number };
+type Line = { item: MenuItem; quantity: number; extras?: { name: string; price: number }[] };
 type State = { lines: Line[] };
-type Action = { type: "add"; item: MenuItem } | { type: "remove"; id: string } | { type: "clear" };
+type Action =
+  | { type: "add"; item: MenuItem; extras?: { name: string; price: number }[] }
+  | { type: "remove"; id: string }
+  | { type: "clear" };
 const CartContext = createContext<{
   state: State;
-  add: (item: MenuItem) => void;
+  add: (item: MenuItem, extras?: { name: string; price: number }[]) => void;
   remove: (id: string) => void;
   clear: () => void;
 } | null>(null);
@@ -43,7 +46,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       state,
-      add: (item: MenuItem) => dispatch({ type: "add", item }),
+      add: (item: MenuItem, extras?: { name: string; price: number }[]) =>
+        dispatch({ type: "add", item, extras }),
       remove: (id: string) => dispatch({ type: "remove", id }),
       clear: () => dispatch({ type: "clear" }),
     }),
