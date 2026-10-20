@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
+import { CartProvider } from "@/src/state/cart";
 import { useFonts } from "expo-font";
 
 // ──────────────────────────────────────────────────────────────
@@ -114,7 +115,9 @@ export default function RootLayout() {
   // exceptions from exposing stack traces (CWE-209: Information Exposure).
   return (
     <SafeErrorBoundary>
-      <Stack screenOptions={{ headerShown: false }} />
+      <CartProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </CartProvider>
     </SafeErrorBoundary>
   );
 }

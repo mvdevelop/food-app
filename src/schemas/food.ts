@@ -1,71 +1,59 @@
-/**
- * Zod schemas for Food App domain entities.
- *
- * Security Purpose:
- * These schemas provide runtime validation of static data to prevent:
- * - Malformed data from causing crashes
- * - Potential injection vectors (XSS, path traversal)
- * - Data type confusion attacks
- *
- * Implements OWASP ASVS V5.1 (Input Validation) and V5.5 (Output Encoding).
- *
- * @see https://owasp.org/Top10/A03_2021-Injection/
- * @see https://owasp.org/Top10/A03_2021-Injection/
- */
-
 import { z } from "zod";
 
-/**
- * Hex color validation — prevents CSS injection through color values.
- * Only allows standard 6-digit hex colors (#RRGGBB).
- */
 export const HexColorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Invalid hex color format");
-
-/**
- * Category schema — food categories for filtering.
- */
-export const CategorySchema = z.object({
-  // ID accepts numeric strings (e.g. "1", "2") or UUIDs
-  id: z.string().min(1, "Category ID cannot be empty"),
-  name: z.string().min(1, "Category name cannot be empty").max(50, "Category name too long"),
-});
-
-/**
- * Offer schema — promotional offer cards.
- * Security: color field validated against strict hex format
- */
-export const OfferSchema = z.object({
-  id: z.number().int().positive("Offer ID must be a positive integer"),
-  title: z
+const SafeText = (max: number) =>
+  z
     .string()
-    .min(1, "Offer title cannot be empty")
-    .max(100, "Offer title too long")
-    // Prevent XSS — no HTML/special chars in titles
-    .refine((s) => !s.includes("<"), "Title contains invalid characters"),
-  image: z.any(), // Image asset from require()
+    .min(1)
+    .max(max)
+    .refine((s) => !/[<>]/.test(s), "Text contains invalid characters");
+
+export const CategorySchema = z.object({
+  id: z.string().min(1),
+  name: SafeText(50),
+  emoji: z.string().max(4).optional(),
+});
+export const OfferSchema = z.object({
+  id: z.number().int().positive(),
+  title: SafeText(100),
+  subtitle: SafeText(160).optional(),
+  image: z.any(),
   color: HexColorSchema,
 });
-
-/**
- * Side schema — side dish items.
- */
+export const RestaurantSchema = z.object({
+  id: z.string().min(1),
+  name: SafeText(80),
+  cuisine: SafeText(80),
+  image: z.any(),
+  rating: z.number().min(0).max(5),
+  reviews: z.number().int().nonnegative(),
+  deliveryTime: SafeText(30),
+  deliveryFee: z.number().nonnegative(),
+  badge: SafeText(40).optional(),
+  category: SafeText(40),
+});
+export const MenuItemSchema = z.object({
+  id: z.string().min(1),
+  restaurantId: z.string().min(1),
+  name: SafeText(80),
+  description: SafeText(180),
+  image: z.any(),
+  price: z.number().positive(),
+  popular: z.boolean().optional(),
+});
 export const SideSchema = z.object({
-  name: z.string().min(1, "Side name cannot be empty").max(50, "Side name too long"),
+  name: SafeText(50),
   image: z.any(),
-  price: z.number().positive("Price must be positive"),
+  price: z.number().positive(),
 });
-
-/**
- * Topping schema — pizza/burger topping items.
- */
 export const ToppingSchema = z.object({
-  name: z.string().min(1, "Topping name cannot be empty").max(50, "Topping name too long"),
+  name: SafeText(50),
   image: z.any(),
-  price: z.number().positive("Price must be positive"),
+  price: z.number().positive(),
 });
-
-// Array schemas
 export const CategoryArraySchema = z.array(CategorySchema);
 export const OfferArraySchema = z.array(OfferSchema);
+export const RestaurantArraySchema = z.array(RestaurantSchema);
+export const MenuItemArraySchema = z.array(MenuItemSchema);
 export const SideArraySchema = z.array(SideSchema);
 export const ToppingArraySchema = z.array(ToppingSchema);
