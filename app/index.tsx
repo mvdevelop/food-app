@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { FlatList, Image, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 import { categories, currency, restaurants } from "@/src/data/marketplace";
 import { useCart } from "@/src/state/cart";
 
@@ -94,6 +95,7 @@ export default function Index() {
               accessibilityRole="button"
               accessibilityLabel={`${item.name}, nota ${item.rating}`}
               className="overflow-hidden rounded-3xl bg-white shadow-sm"
+              onPress={() => router.push({ pathname: "/restaurant/[id]", params: { id: item.id } })}
             >
               <Image source={item.image} className="h-40 w-full" resizeMode="cover" />
               <View className="p-4">
