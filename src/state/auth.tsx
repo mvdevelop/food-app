@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 import { api } from "@/src/services/api";
-
-type User = { id: string; name: string; email: string; role: string };
+import type { User } from "@/src/schemas/food";
 type AuthContextValue = {
   user: User | null;
   loading: boolean;
@@ -16,7 +15,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const users = (await api.signIn(email, password)) as User[];
+      const users = await api.signIn(email, password);
       const nextUser = users[0];
       if (!nextUser) {
         return false;

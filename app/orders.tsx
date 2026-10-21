@@ -3,13 +3,14 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { api } from "@/src/services/api";
+import type { Order } from "@/src/schemas/food";
 
 export default function OrdersScreen() {
-  const [orders, setOrders] = useState<{ id: string; status: string; total: number }[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   useEffect(() => {
     api
       .orders("user-001")
-      .then((data) => setOrders(data as { id: string; status: string; total: number }[]))
+      .then(setOrders)
       .catch(() => setOrders([]));
   }, []);
   return (
