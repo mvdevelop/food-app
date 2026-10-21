@@ -60,3 +60,6 @@ coverage/
 !.vscode/extensions.json
 !.vscode/mcp.json
 !.vscode/settings.json
+
+# Generated Expo export artifacts
+.expo-export-check/
