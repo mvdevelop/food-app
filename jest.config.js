@@ -6,15 +6,15 @@ module.exports = {
   testEnvironment: "node",
 
   // Jest setup file — runs before each test suite
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
   // Module path aliases + asset mocking
   moduleNameMapper: {
     // Static assets (images, fonts) — MUST be first
     "\\.(png|jpg|jpeg|gif|svg|ttf|otf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|eot)$":
-      "<rootDir>/__mocks__/fileMock.js",
+      "<rootDir>/__mocks__/fileMock.ts",
     // CSS modules and stylesheets
-    "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
+    "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.ts",
     // Path alias from tsconfig.json
     "^@/(.*)$": "<rootDir>/$1",
   },

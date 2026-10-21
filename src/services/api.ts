@@ -1,16 +1,34 @@
 import type { MenuItem, Restaurant } from "@/src/types/food";
 
 const API_URL = process.env["EXPO_PUBLIC_API_URL"] ?? "http://localhost:3001";
+const API_TIMEOUT_MS = 8000;
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: { "Content-Type": "application/json", ...options?.headers },
-  });
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      signal: options?.signal ?? controller.signal,
+      headers: { "Content-Type": "application/json", ...options?.headers },
+    });
+    if (!response.ok) {
+      throw new ApiError(response.status, `API request failed: ${response.status}`);
+    }
+    return response.json() as Promise<T>;
+  } finally {
+    clearTimeout(timeout);
   }
-  return response.json() as Promise<T>;
 }
 
 export const api = {
