@@ -2,7 +2,6 @@
 // =========================================
 // This file runs before each test suite.
 
-import * as React from "react";
 // It mocks browser-native APIs that don't exist in the Node.js test environment
 // and sets up security-focused test utilities.
 
@@ -11,8 +10,9 @@ import * as React from "react";
 
 // Mock expo-router in Jest's Node environment; navigation is covered by Expo runtime.
 jest.mock("expo-router", () => {
-  const mockStack = ({ children }: { children?: React.ReactNode }) =>
-    React.createElement(React.Fragment, null, children);
+  const mockReact = require("react") as typeof import("react");
+  const mockStack = ({ children }: { children?: import("react").ReactNode }) =>
+    mockReact.createElement(mockReact.Fragment, null, children);
   const MockScreen = (): null => null;
   MockScreen.displayName = "MockScreen";
   mockStack.Screen = MockScreen;

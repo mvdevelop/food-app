@@ -1,5 +1,67 @@
 import { z } from "zod";
 
+export const UserSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  email: z.string().email(),
+  role: z.string().min(1),
+});
+
+export const UserArraySchema = z.array(UserSchema);
+
+export const ReviewSchema = z.object({
+  id: z.string().min(1),
+  restaurantId: z.string().min(1),
+  userId: z.string().min(1),
+  userName: z.string().min(1),
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().min(1).max(500),
+  createdAt: z.string().min(1),
+});
+
+export const ReviewArraySchema = z.array(ReviewSchema);
+
+export const OrderItemSchema = z.object({
+  dishId: z.string().min(1),
+  quantity: z.number().int().positive(),
+});
+
+export const OrderSchema = z.object({
+  id: z.string().min(1),
+  userId: z.string().min(1),
+  restaurantId: z.string().min(1),
+  status: z.string().min(1),
+  subtotal: z.number().nonnegative(),
+  deliveryFee: z.number().nonnegative(),
+  total: z.number().nonnegative(),
+  estimatedDelivery: z.string().optional(),
+  note: z.string().max(500).optional(),
+  createdAt: z.string().min(1),
+  items: z.array(OrderItemSchema),
+});
+
+export const OrderArraySchema = z.array(OrderSchema);
+
+export const AddressSchema = z.object({
+  id: z.string().min(1),
+  userId: z.string().min(1),
+  label: z.string().min(1),
+  street: z.string().min(1),
+  district: z.string().min(1),
+  city: z.string().min(1),
+  zipCode: z.string().min(1),
+  latitude: z.number(),
+  longitude: z.number(),
+  isDefault: z.boolean(),
+});
+
+export const AddressArraySchema = z.array(AddressSchema);
+
+export type User = z.infer<typeof UserSchema>;
+export type Review = z.infer<typeof ReviewSchema>;
+export type Order = z.infer<typeof OrderSchema>;
+export type Address = z.infer<typeof AddressSchema>;
+
 export const HexColorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Invalid hex color format");
 const SafeText = (max: number) =>
   z
@@ -24,7 +86,7 @@ export const RestaurantSchema = z.object({
   id: z.string().min(1),
   name: SafeText(80),
   cuisine: SafeText(80),
-  image: z.any(),
+  image: z.any().optional(),
   rating: z.number().min(0).max(5),
   reviews: z.number().int().nonnegative(),
   deliveryTime: SafeText(30),

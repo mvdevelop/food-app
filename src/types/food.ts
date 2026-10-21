@@ -16,7 +16,7 @@ export interface Restaurant {
   readonly id: string;
   readonly name: string;
   readonly cuisine: string;
-  readonly image: any;
+  readonly image?: any;
   readonly rating: number;
   readonly reviews: number;
   readonly deliveryTime: string;

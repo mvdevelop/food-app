@@ -1,19 +1,15 @@
 import React, { createContext, useContext, useMemo, useReducer } from "react";
 import type { MenuItem } from "@/src/types/food";
 
-type Line = { item: MenuItem; quantity: number; extras?: { name: string; price: number }[] };
-type State = { lines: Line[] };
-type Action =
-  | { type: "add"; item: MenuItem; extras?: { name: string; price: number }[] }
+export type CartExtra = { name: string; price: number };
+export type CartLine = { item: MenuItem; quantity: number; extras?: CartExtra[] };
+export type CartState = { lines: CartLine[] };
+export type CartAction =
+  | { type: "add"; item: MenuItem; extras?: CartExtra[] }
   | { type: "remove"; id: string }
   | { type: "clear" };
-const CartContext = createContext<{
-  state: State;
-  add: (item: MenuItem, extras?: { name: string; price: number }[]) => void;
-  remove: (id: string) => void;
-  clear: () => void;
-} | null>(null);
-function reducer(state: State, action: Action): State {
+
+export function cartReducer(state: CartState, action: CartAction): CartState {
   if (action.type === "clear") {
     return { lines: [] };
   }
@@ -27,7 +23,7 @@ function reducer(state: State, action: Action): State {
         ),
       };
     }
-    return { lines: [...state.lines, { item: action.item, quantity: 1 }] };
+    return { lines: [...state.lines, { item: action.item, quantity: 1, extras: action.extras }] };
   }
   if (index < 0) {
     return state;
@@ -41,8 +37,15 @@ function reducer(state: State, action: Action): State {
         );
   return { lines };
 }
+
+const CartContext = createContext<{
+  state: CartState;
+  add: (item: MenuItem, extras?: CartExtra[]) => void;
+  remove: (id: string) => void;
+  clear: () => void;
+} | null>(null);
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { lines: [] });
+  const [state, dispatch] = useReducer(cartReducer, { lines: [] });
   const value = useMemo(
     () => ({
       state,
