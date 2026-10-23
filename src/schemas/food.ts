@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+import type { ImageSourcePropType } from "react-native";
+
+const ImageSourceSchema = z.custom<ImageSourcePropType>();
+
 export const UserSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -79,14 +83,14 @@ export const OfferSchema = z.object({
   id: z.number().int().positive(),
   title: SafeText(100),
   subtitle: SafeText(160).optional(),
-  image: z.any(),
+  image: ImageSourceSchema,
   color: HexColorSchema,
 });
 export const RestaurantSchema = z.object({
   id: z.string().min(1),
   name: SafeText(80),
   cuisine: SafeText(80),
-  image: z.any().optional(),
+  image: ImageSourceSchema.optional(),
   rating: z.number().min(0).max(5),
   reviews: z.number().int().nonnegative(),
   deliveryTime: SafeText(30),
@@ -99,18 +103,18 @@ export const MenuItemSchema = z.object({
   restaurantId: z.string().min(1),
   name: SafeText(80),
   description: SafeText(180),
-  image: z.any(),
+  image: ImageSourceSchema,
   price: z.number().positive(),
   popular: z.boolean().optional(),
 });
 export const SideSchema = z.object({
   name: SafeText(50),
-  image: z.any(),
+  image: ImageSourceSchema,
   price: z.number().positive(),
 });
 export const ToppingSchema = z.object({
   name: SafeText(50),
-  image: z.any(),
+  image: ImageSourceSchema,
   price: z.number().positive(),
 });
 export const CategoryArraySchema = z.array(CategorySchema);

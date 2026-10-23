@@ -6,7 +6,7 @@ const item: MenuItem = {
   restaurantId: "restaurant-1",
   name: "Classic Burger",
   description: "Burger",
-  image: "burger",
+  image: { uri: "burger" },
   price: 25,
 };
 

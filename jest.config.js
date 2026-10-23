@@ -36,7 +36,7 @@ module.exports = {
     "!**/node_modules/**",
     "!**/expo-env.d.ts",
     "!**/*.d.ts",
-    "!**/jest.setup.js",
+    "!**/jest.setup.ts",
   ],
   coverageDirectory: "coverage",
   coverageReporters: ["lcov", "text", "text-summary"],

@@ -1,3 +1,7 @@
+import type { ImageSourcePropType } from "react-native";
+
+export type FoodImage = ImageSourcePropType;
+
 export interface Category {
   readonly id: string;
   readonly name: string;
@@ -8,7 +12,7 @@ export interface Offer {
   readonly id: number;
   readonly title: string;
   readonly subtitle?: string;
-  readonly image: any;
+  readonly image: FoodImage;
   readonly color: string;
 }
 
@@ -16,7 +20,7 @@ export interface Restaurant {
   readonly id: string;
   readonly name: string;
   readonly cuisine: string;
-  readonly image?: any;
+  readonly image?: FoodImage;
   readonly rating: number;
   readonly reviews: number;
   readonly deliveryTime: string;
@@ -30,7 +34,7 @@ export interface MenuItem {
   readonly restaurantId: string;
   readonly name: string;
   readonly description: string;
-  readonly image: any;
+  readonly image: FoodImage;
   readonly price: number;
   readonly popular?: boolean;
 }
@@ -47,14 +51,14 @@ export interface Combo {
 
 export interface Side {
   readonly name: string;
-  readonly image: any;
+  readonly image: FoodImage;
   readonly price: number;
 }
 export interface Topping {
   readonly name: string;
-  readonly image: any;
+  readonly image: FoodImage;
   readonly price: number;
 }
 export interface ImageAssetMap {
-  readonly [key: string]: any;
+  readonly [key: string]: FoodImage;
 }

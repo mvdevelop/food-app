@@ -6,7 +6,6 @@
     "start": "expo start",
     "mock-api": "json-server --watch db.json --port 3001",
     "mock-api:static": "json-server db.json --port 3001",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
