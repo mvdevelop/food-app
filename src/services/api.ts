@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { MenuItem, Restaurant } from "@/src/types/food";
+import type { Order } from "@/src/schemas/food";
 import {
   AddressArraySchema,
   MenuItemArraySchema,
@@ -59,7 +60,7 @@ export const api = {
     request(`/reviews?restaurantId=${encodeURIComponent(restaurantId)}`, ReviewArraySchema),
   orders: (userId: string) =>
     request(`/orders?userId=${encodeURIComponent(userId)}`, OrderArraySchema),
-  createOrder: (order: Record<string, unknown>) =>
+  createOrder: (order: Order) =>
     request("/orders", OrderSchema, { method: "POST", body: JSON.stringify(order) }),
   order: (id: string) => request(`/orders/${encodeURIComponent(id)}`, OrderSchema),
   addresses: (userId: string) =>

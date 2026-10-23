@@ -6,6 +6,7 @@ import { currency } from "@/src/data/marketplace";
 import { useCart } from "@/src/state/cart";
 import { useAuth } from "@/src/state/auth";
 import { api } from "@/src/services/api";
+import type { Order } from "@/src/schemas/food";
 
 export default function CheckoutScreen() {
   const { state, clear } = useCart();
@@ -20,7 +21,7 @@ export default function CheckoutScreen() {
       return;
     }
     setSubmitting(true);
-    const order = {
+    const order: Order = {
       id: `order-${Date.now()}`,
       userId: user?.id ?? "user-001",
       restaurantId: state.lines[0]?.item.restaurantId ?? "burger-house",
